@@ -9,17 +9,17 @@ function timing1(options){
         onStop      = options.onStop || function(i){};
     var i = a;
     !function f(){
-        if (a == i) {
-            onStart(i);
-        } else {
-            onTiming(i);
-        }
-        i += step;
-        if (i <= z) {
+        if (i < z) {
+            if (a == i) {
+                onStart(i);
+            } else {
+                onTiming(i);
+            }
             setTimeout(f, delay);
         } else {
             onStop(i);
         }
+        i += step;
     }();
 }
 timing1({
@@ -56,19 +56,18 @@ function timing2(options){
         onStop      = options.onStop || function(i){};
     var i = a;
     !function f(){
-        if (a == i) {
-            onStart(i);
-        } else {
-            onTiming(i);
-        }
-        i += step;
         if (i <= z) {
-            var freq = amplTop - amplBot;
-            var randFreq = amplBot + Math.random() * (amplTop - amplBot);
-            setTimeout(f, delay + randFreq);
+            if (a == i) {
+                onStart(i);
+            } else {
+                onTiming(i);
+            };
+            var randAmpl = amplBot + Math.random() * (amplTop - amplBot);
+            setTimeout(f, delay + randAmpl);
         } else {
             onStop(i);
         }
+        i += step;
     }();
 }
 timing2({
