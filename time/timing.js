@@ -1,12 +1,12 @@
-//ºãÆµÑÓ³ÙÆ÷£¨¶¨Ê±Æ÷£©
+//æ’é¢‘å»¶è¿Ÿå™¨ï¼ˆå®šæ—¶å™¨ï¼‰
 function timing1(options){
-    options.a           = options.a || 0;//¿ªÊ¼
-    options.z           = options.z || 100;//½áÊø
-    options.step        = options.step || +1;//²½³¤
-    options.delay       = options.delay || 10;//ÑÓ³Ù
-    options.onStart     = options.onStart || function(i){};//Æô¶¯Ê±
-    options.onTiming    = options.onTiming || function(i){};//½øĞĞÊ±
-    options.onStop      = options.onStop || function(i){};//½áÊøÊ±
+    options.a           = options.a || 0;//å¼€å§‹
+    options.z           = options.z || 100;//ç»“æŸ
+    options.step        = options.step || +1;//æ­¥é•¿
+    options.delay       = options.delay || 10;//å»¶è¿Ÿ
+    options.onStart     = options.onStart || function(i){};//å¯åŠ¨æ—¶
+    options.onTiming    = options.onTiming || function(i){};//è¿›è¡Œæ—¶
+    options.onStop      = options.onStop || function(i){};//ç»“æŸæ—¶
     options.i = options.a;
     !function f(){
         if (options.i < options.z) {
@@ -43,17 +43,17 @@ timing1({
 
 
 
-//±äÆµÑÓ³ÙÆ÷
+//å˜é¢‘å»¶è¿Ÿå™¨
 function timing2(options){
-    options.a           = options.a || 0;//¿ªÊ¼
-    options.z           = options.z || 100;//½áÊø
-    options.step        = options.step || +1;//²½³¤
-    options.delay       = options.delay || 10;//ÑÓ³Ù
-    options.amplTop     = options.amplTop || +20;//Õñ·ù·åÖµ
-    options.amplBot     = options.amplBot || -15;//Õñ·ù¹ÈÖµ
-    options.onStart     = options.onStart || function(i){};//Æô¶¯Ê±
-    options.onTiming    = options.onTiming || function(i){};//½øĞĞÊ±
-    options.onStop      = options.onStop || function(i){};//½áÊøÊ±
+    options.a           = options.a || 0;//å¼€å§‹
+    options.z           = options.z || 100;//ç»“æŸ
+    options.step        = options.step || +1;//æ­¥é•¿
+    options.delay       = options.delay || 10;//å»¶è¿Ÿ
+    options.amplTop     = options.amplTop || +20;//æŒ¯å¹…å³°å€¼
+    options.amplBot     = options.amplBot || -15;//æŒ¯å¹…è°·å€¼
+    options.onStart     = options.onStart || function(i){};//å¯åŠ¨æ—¶
+    options.onTiming    = options.onTiming || function(i){};//è¿›è¡Œæ—¶
+    options.onStop      = options.onStop || function(i){};//ç»“æŸæ—¶
     options.i = options.a;
     !function f(){
         if (options.i < options.z) {
