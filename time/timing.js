@@ -1,36 +1,36 @@
 //恒频延迟器（定时器）
 function timing1(options){
-    var a           = options.a || 0, 
-        z           = options.z || 100, 
-        step        = options.step || +1, 
-        delay       = options.delay || 10;//i, 开始, 结束, 步长
-    var onStart     = options.onStart || function(i){},
-        onTiming    = options.onTiming || function(i){},
-        onStop      = options.onStop || function(i){};
-    var i = a;
+    options.a           = options.a || 0;//开始
+    options.z           = options.z || 100;//结束
+    options.step        = options.step || +1;//步长
+    options.delay       = options.delay || 10;//延迟
+    options.onStart     = options.onStart || function(i){};//启动时
+    options.onTiming    = options.onTiming || function(i){};//进行时
+    options.onStop      = options.onStop || function(i){};//结束时
+    options.i = options.a;
     !function f(){
-        if (i < z) {
-            if (a == i) {
-                onStart(i);
+        if (options.i < options.z) {
+            if (options.a == options.i) {
+                options.onStart(options);
             } else {
-                onTiming(i);
+                options.onTiming(options);
             }
-            setTimeout(f, delay);
+            setTimeout(f, options.delay);
         } else {
-            onStop(i);
+            options.onStop(options);
         }
-        i += step;
+        options.i += options.step;
     }();
 }
 timing1({
     delay: 100,
-    onStart: function(){
+    onStart: function(options){
         console.log('start');
     },
-    onTiming: function(){
+    onTiming: function(options){
         console.log('timing');
     },
-    onStop: function(){
+    onStop: function(options){
         console.log('stop');
     }
 });
@@ -45,39 +45,39 @@ timing1({
 
 //变频延迟器
 function timing2(options){
-    var a           = options.a || 0, 
-        z           = options.z || 100, 
-        step        = options.step || +1, 
-        amplTop     = options.amplTop || +20, 
-        amplBot     = options.amplBot || -15, 
-        delay       = options.delay || 10;//i, 开始, 结束, 步长, 振幅峰值, 振幅谷值, 延迟
-    var onStart     = options.onStart || function(i){},
-        onTiming    = options.onTiming || function(i){},
-        onStop      = options.onStop || function(i){};
-    var i = a;
+    options.a           = options.a || 0;//开始
+    options.z           = options.z || 100;//结束
+    options.step        = options.step || +1;//步长
+    options.delay       = options.delay || 10;//延迟
+    options.amplTop     = options.amplTop || +20;//振幅峰值
+    options.amplBot     = options.amplBot || -15;//振幅谷值
+    options.onStart     = options.onStart || function(i){};//启动时
+    options.onTiming    = options.onTiming || function(i){};//进行时
+    options.onStop      = options.onStop || function(i){};//结束时
+    options.i = options.a;
     !function f(){
-        if (i <= z) {
-            if (a == i) {
-                onStart(i);
+        if (options.i < options.z) {
+            if (options.a == options.i) {
+                options.onStart(options);
             } else {
-                onTiming(i);
+                options.onTiming(options);
             };
-            var randAmpl = amplBot + Math.random() * (amplTop - amplBot);
-            setTimeout(f, delay + randAmpl);
+            var randAmpl = options.amplBot + Math.random() * (options.amplTop - options.amplBot);
+            setTimeout(f, options.delay + randAmpl);
         } else {
-            onStop(i);
+            options.onStop(options);
         }
-        i += step;
+        options.i += options.step;
     }();
 }
 timing2({
-    onStart: function(){
+    onStart: function(options){
         console.log('start');
     },
-    onTiming: function(){
+    onTiming: function(options){
         console.log('timing');
     },
-    onStop: function(){
+    onStop: function(options){
         console.log('stop');
     }
 });
