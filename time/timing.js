@@ -1,36 +1,32 @@
 //恒频延迟器（定时器）
-function timing1(options){
-    options.a           = options.a || 0;//开始
-    options.z           = options.z || 100;//结束
-    options.step        = options.step || +1;//步长
-    options.delay       = options.delay || 10;//延迟
-    options.onStart     = options.onStart || function(i){};//启动时
-    options.onTiming    = options.onTiming || function(i){};//进行时
-    options.onStop      = options.onStop || function(i){};//结束时
-    options.i = options.a;
-    !function f(){
-        if (options.i < options.z) {
-            if (options.a == options.i) {
-                options.onStart(options);
-            } else {
-                options.onTiming(options);
-            }
-            setTimeout(f, options.delay);
-        } else {
-            options.onStop(options);
+function timing1(opt){
+    opt.a           = opt.a || 0;//开始
+    opt.z           = opt.z || 100;//结束
+    opt.step        = opt.step || +1;//步长
+    opt.delay       = opt.delay || 10;//延迟
+    opt.onStart     = opt.onStart || function(i){};//启动时
+    opt.onTiming    = opt.onTiming || function(i){};//进行时
+    opt.onStop      = opt.onStop || function(i){};//结束时
+    opt.i = opt.a;
+    ~ function f(){
+        if (opt.i <= opt.z) {
+            opt.a == opt.i && opt.onStart(opt);
+            opt.onTiming(opt);
+            opt.z == opt.i && opt.onStop(opt);
+            setTimeout(f, opt.delay);
         }
-        options.i += options.step;
+        opt.i += opt.step;
     }();
 }
 timing1({
     delay: 100,
-    onStart: function(options){
+    onStart: function(opt){
         console.log('start');
     },
-    onTiming: function(options){
+    onTiming: function(opt){
         console.log('timing');
     },
-    onStop: function(options){
+    onStop: function(opt){
         console.log('stop');
     }
 });
@@ -44,40 +40,37 @@ timing1({
 
 
 //变频延迟器
-function timing2(options){
-    options.a           = options.a || 0;//开始
-    options.z           = options.z || 100;//结束
-    options.step        = options.step || +1;//步长
-    options.delay       = options.delay || 10;//延迟
-    options.amplTop     = options.amplTop || +20;//振幅峰值
-    options.amplBot     = options.amplBot || -15;//振幅谷值
-    options.onStart     = options.onStart || function(i){};//启动时
-    options.onTiming    = options.onTiming || function(i){};//进行时
-    options.onStop      = options.onStop || function(i){};//结束时
-    options.i = options.a;
-    !function f(){
-        if (options.i < options.z) {
-            if (options.a == options.i) {
-                options.onStart(options);
-            } else {
-                options.onTiming(options);
-            };
-            var randAmpl = options.amplBot + Math.random() * (options.amplTop - options.amplBot);
-            setTimeout(f, options.delay + randAmpl);
-        } else {
-            options.onStop(options);
+function timing2(opt){
+    opt.a           = opt.a || 0;//开始
+    opt.z           = opt.z || 100;//结束
+    opt.step        = opt.step || +1;//步长
+    opt.delay       = opt.delay || 10;//延迟
+    opt.amplTop     = opt.amplTop || +20;//振幅峰值
+    opt.amplBot     = opt.amplBot || -15;//振幅谷值
+    opt.onStart     = opt.onStart || function(i){};//启动时
+    opt.onTiming    = opt.onTiming || function(i){};//进行时
+    opt.onStop      = opt.onStop || function(i){};//结束时
+    opt.i = opt.a;
+    ~ function f(){
+        if (opt.i <= opt.z) {
+            opt.a == opt.i && opt.onStart(opt);
+            opt.onTiming(opt);
+            opt.z == opt.i && opt.onStop(opt);
+            var randAmpl = opt.amplBot + Math.random() * (opt.amplTop - opt.amplBot);
+            console.log({randAmpl:randAmpl});
+            setTimeout(f, opt.delay + randAmpl);
         }
-        options.i += options.step;
+        opt.i += opt.step;
     }();
 }
 timing2({
-    onStart: function(options){
+    onStart: function(opt){
         console.log('start');
     },
-    onTiming: function(options){
+    onTiming: function(opt){
         console.log('timing');
     },
-    onStop: function(options){
+    onStop: function(opt){
         console.log('stop');
     }
 });
