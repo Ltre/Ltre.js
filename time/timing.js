@@ -47,6 +47,7 @@ window.LtreLib = window.LtreLib || {};//使用一个生僻的名称作为全局�
  *              console.log('stop');
  *          }
  *      });
+ *      timingObj.ctrl.goTo = 12;//跳至12
  *      timingObj.ctrl.goPause = true;//暂停计时
  *      timingObj.ctrl.goPause = false;//恢复计时
  *      timingObj.ctrl.goStop = true;//终止
@@ -64,7 +65,7 @@ LtreLib.timing = function(opt){
     opt.i = opt.a;
     
     var innerThat = this;
-    this.ctrl = {goPause:false, goStop:false, goFirst:false, goLast:false, goPrev:false, goNext:false};
+    this.ctrl = {goPause:false, goStop:false, goFirst:false, goLast:false, goPrev:false, goNext:false, goTo:false};
     ~ function f(){
         if (opt.i <= opt.z) {
             //触发延时过程
@@ -99,6 +100,11 @@ LtreLib.timing = function(opt){
                 innerThat.ctrl.goNext = false;
                 opt.i += opt.step;
                 return;//跳至下次
+            }
+            if ('number' == typeof innerThat.ctrl.goTo && opt.a <= innerThat.ctrl.goTo && innerThat.ctrl.goTo <= opt.z) {
+                opt.i = innerThat.ctrl.goTo;
+                innerThat.ctrl.goTo = false;
+                return;//跳至指定位置
             }
             
             //核心执行部分
