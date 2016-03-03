@@ -1,4 +1,4 @@
-window.LtreLib = window.LtreLib || {};
+window.Ltrelib = window.Ltrelib || {};
 ~function(){new function(){
     
     /**
@@ -8,7 +8,7 @@ window.LtreLib = window.LtreLib || {};
      * @param duration 限制次数的时间范围
      * @return {Boolean} 是否可操作
      */
-    LtreLib.limitOperate = function(elem, maxCount, duration){
+    Ltrelib.limitOperate = function(elem, maxCount, duration){
         if (! elem) return false;
         maxCount = maxCount || 5;
         duration = duration || 600;
@@ -34,7 +34,7 @@ window.LtreLib = window.LtreLib || {};
      * @param duration 限制次数的时间范围
      * @return {Boolean} 是否可操作
      */
-    LtreLib.$limitOperate = function(selector, maxCount, duration){
+    Ltrelib.$limitOperate = function(selector, maxCount, duration){
         if (! selector) return true;
         maxCount = maxCount || 5;
         duration = duration || 600;

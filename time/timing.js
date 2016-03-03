@@ -1,4 +1,4 @@
-window.LtreLib = window.LtreLib || {};//使用一个生僻的名称作为全局变量，以存储自定义的库，防止与其它变量冲突
+window.Ltrelib = window.Ltrelib || {};//使用一个生僻的名称作为全局变量，以存储自定义的库，防止与其它变量冲突
 /**
  * 延迟器
  * @param opt
@@ -6,7 +6,7 @@ window.LtreLib = window.LtreLib || {};//使用一个生僻的名称作为全局�
  * @example
  * 用法一：
  *      //恒频延迟器（定时器）
- *      LtreLib.timing({
+ *      Ltrelib.timing({
  *          delay: 100,
  *          onStart: function(opt){
  *              console.log('start');
@@ -19,7 +19,7 @@ window.LtreLib = window.LtreLib || {};//使用一个生僻的名称作为全局�
  *          }
  *      });
  *      //变频延迟器
- *      LtreLib.timing({
+ *      Ltrelib.timing({
  *          delay: 100,
  *          amplTop: +200,
  *          amplBot: -1000,
@@ -35,7 +35,7 @@ window.LtreLib = window.LtreLib || {};//使用一个生僻的名称作为全局�
  *      });
  * 用法二：
  *      //外部干预计时
- *      var timingObj = new LtreLib.timing({
+ *      var timingObj = new Ltrelib.timing({
  *          delay: 100,
  *          onStart: function(opt){
  *              console.log('start');
@@ -52,7 +52,7 @@ window.LtreLib = window.LtreLib || {};//使用一个生僻的名称作为全局�
  *      timingObj.ctrl.goPause = false;//恢复计时
  *      timingObj.ctrl.goStop = true;//终止
  */
-LtreLib.timing = function(opt){
+Ltrelib.timing = function(opt){
     opt.a           = opt.a || 0;//开始
     opt.z           = opt.z || 100;//结束
     opt.step        = opt.step || +1;//步长
