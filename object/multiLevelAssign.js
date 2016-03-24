@@ -7,7 +7,7 @@
  *      o.multiLevelAssign('a', 'b', 123456); // {a:{b:123456}}
  */
 Object.prototype.multiLevelAssign = function(){
-    if (arguments.length < 2) throw new Error('args were error, it must be used as multiLevelAssign(key1, [key2,...,keyn,] value)');
+    if (arguments.length < 2) throw new Error('args are error, it must be used as multiLevelAssign(key1, [key2,...,keyn,] value)');
     var value = arguments[arguments.length - 1];
     var keys = Array.prototype.slice.call(arguments, 0, -1);
     var curr = this;
