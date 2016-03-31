@@ -1,4 +1,4 @@
-//支持json和jsonp，但不支持非200状态码的情况（从虎牙视频项目拷贝）
+//鏀寔json鍜宩sonp锛屼絾涓嶆敮鎸侀潪200鐘舵�佺爜鐨勬儏鍐碉紙浠庤檸鐗欒棰戦」鐩嫹璐濓級
 function jsonp(url, data, callback){
     var buildParam =  function(object){
         if(typeof object== 'object'){
