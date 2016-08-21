@@ -1,31 +1,35 @@
 function ltreCrypt(str){    
-    var table = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
-    var v1 = encodeURIComponent(str).replace(/%/g,'').toLowerCase();//encode剔%
+    var table = '0123456789abcdef~ghijklmnopqrstuvwxyz'.split('');
+    var v1 = encodeURIComponent(str).replace(/%/g,'~').toLowerCase();//encode替%
     var v2 = [];//插缝算随机
     v1.split("").forEach(function(e, i){
-        var randomPos = Math.floor(Math.random()*table.length);
-        var plusPos = Math.floor((table.indexOf(e) + randomPos)%table.length);
-        v2.push(table[randomPos]);
+        var rawPos = table.indexOf(e);
+        var offset = Math.floor(Math.random()*(table.length-rawPos));
+        var plusPos = rawPos + offset;
+        v2.push(table[offset]);//此步密钥
         v2.push(table[plusPos]);
     });
-    var v3 = [];//时间戳遍历随机
-    var time = String(+ new Date()).split('');
-    v2.forEach(function(e, i){
-        var loopTimePos = Math.floor(i % time.length);
-        var addNum = parseInt(time[loopTimePos]);
-        var newPos = Math.floor((table.indexOf(e) + addNum) % table.length);
-        v3.push(table[newPos]);
-    });
-    v3 = v3.reverse().join('');
-    return v3;
+    v2 = v2.reverse().join('');
+    for (var i = 0; v2.match(/~/) && i < 3; ++i) {
+        v2 = ltreCrypt(str);
+    }
+    return v2;
 }
 
 
 function ltreDeCrypt(str){
-    var v1 = str.split('').reverse();
-    var v2 = [];
-    v1.forEach(function(e, i){
-        
+    var table = '0123456789abcdef~ghijklmnopqrstuvwxyz'.split('');
+    var rawList = [];
+    var offsetList = [];
+    str.split('').reverse().forEach(function(e, i){
+        var pos = table.indexOf(e);
+        if (parseInt((i + 1) % 2) == 1) {
+            offsetList.push(pos);
+        } else {
+            var rawPos = parseInt(pos - offsetList[(i + 1) / 2 - 1]);
+            rawList.push(table[rawPos]);
+        }
     });
-    return '';
+    var raw = rawList.join('').replace(/~/g, '%');
+    return decodeURIComponent(raw);
 }
