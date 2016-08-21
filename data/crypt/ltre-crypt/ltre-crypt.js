@@ -1,6 +1,6 @@
 function ltreCrypt(str){    
-    var table = '0123456789abcdef~ghijklmnopqrstuvwxyz'.split('');
-    var v1 = encodeURIComponent(str).replace(/%/g,'~').toLowerCase();//encode替%
+    var table = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@~!*()-_.\''.split('');//@为%的替代符
+    var v1 = encodeURIComponent(str).replace(/%/g,'@');//encode替%
     var v2 = [];//插缝算随机
     v1.split("").forEach(function(e, i){
         var rawPos = table.indexOf(e);
@@ -10,15 +10,12 @@ function ltreCrypt(str){
         v2.push(table[plusPos]);
     });
     v2 = v2.reverse().join('');
-    for (var i = 0; v2.match(/~/) && i < 3; ++i) {
-        v2 = ltreCrypt(str);
-    }
     return v2;
 }
 
 
 function ltreDeCrypt(str){
-    var table = '0123456789abcdef~ghijklmnopqrstuvwxyz'.split('');
+    var table = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@~!*()-_.\''.split('');//@为%的替代符
     var rawList = [];
     var offsetList = [];
     str.split('').reverse().forEach(function(e, i){
@@ -30,6 +27,6 @@ function ltreDeCrypt(str){
             rawList.push(table[rawPos]);
         }
     });
-    var raw = rawList.join('').replace(/~/g, '%');
+    var raw = rawList.join('').replace(/@/g, '%');
     return decodeURIComponent(raw);
 }
