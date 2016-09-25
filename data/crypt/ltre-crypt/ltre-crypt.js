@@ -13,4 +13,4 @@ function ltreCrypt(str){
     return v2;
 }
 
-exports.ltreCrypt = ltreCrypt;
+module.exports = ltreCrypt;

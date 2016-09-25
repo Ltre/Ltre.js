@@ -10,4 +10,4 @@ var Ltre = {
 	timing: require('./time/timing')
 };
 
-exports.Ltre = Ltre;
+module.exports = Ltre;

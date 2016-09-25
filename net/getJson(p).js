@@ -40,4 +40,4 @@ function jsonp(url, data, callback){
     script.setAttribute("src", url); 		       
 }
 
-exports.jsonp = jsonp;
+module.exports = jsonp;

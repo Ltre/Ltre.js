@@ -15,4 +15,4 @@ function ltreDeCrypt(str){
     return decodeURIComponent(raw);
 }
 
-exports.ltreDeCrypt = ltreDeCrypt;
+module.exports = ltreDeCrypt;

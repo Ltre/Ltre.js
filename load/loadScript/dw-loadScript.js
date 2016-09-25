@@ -24,4 +24,4 @@ function loadScript(src){
     }(0, src);
 }
 
-exports.dwLoadScript = loadScript;
+module.exports = loadScript;
