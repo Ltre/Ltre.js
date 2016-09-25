@@ -66,3 +66,4 @@ window.Ltrelib = window.Ltrelib || {};
     
 };}();
 
+exports.limitOperate = Ltrelib.limitOperate;

@@ -115,3 +115,5 @@ Ltrelib.timing = function(opt){
         opt.i += opt.step;
     }();
 };
+
+exports.timing = Ltrelib.timing;

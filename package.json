@@ -1,0 +1,27 @@
+{
+  "name": "ltre.js",
+  "version": "1.0.0",
+  "description": "Personal Javascript Libs Store",
+  "main": "ltre.js",
+  "scripts": {
+    "test": "node ltre.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ltre/Ltre.js.git"
+  },
+  "keywords": [
+    "Ltre.js",
+    "Ltre",
+    "Javascript",
+    "Libs",
+    "Store",
+    "Personal"
+  ],
+  "author": "Ltre Oreki",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ltre/Ltre.js/issues"
+  },
+  "homepage": "https://github.com/Ltre/Ltre.js#readme"
+}

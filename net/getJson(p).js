@@ -39,3 +39,5 @@ function jsonp(url, data, callback){
     script.setAttribute("type", "text/javascript");  
     script.setAttribute("src", url); 		       
 }
+
+exports.jsonp = jsonp;
