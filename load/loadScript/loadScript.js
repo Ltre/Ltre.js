@@ -1,4 +1,6 @@
-function loadScript(src, onload, confirmLoad, win){
+window.Ltrelib = window.Ltrelib || {};//使用一个生僻的名称作为全局变量，以存储自定义的库，防止与其它变量冲突
+
+Ltrelib.loadScript = function(src, onload, confirmLoad, win) {
     if ('string' != typeof src || ! src.match(/^(https?\:)?\/\/\w+\./))
     onload = 'function' == typeof onload ? onload : function(win){};
     confirmLoad = 'function' == typeof confirmLoad ? confirmLoad : function(win){return true;};
@@ -23,7 +25,7 @@ function loadScript(src, onload, confirmLoad, win){
             }
         }();
     }, 10);
-}
+};
 
 /*
     Usage:
