@@ -116,4 +116,4 @@ Ltrelib.timing = function(opt){
     }();
 };
 
-module.exports = Ltrelib.timing;
+//module.exports = Ltrelib.timing;
