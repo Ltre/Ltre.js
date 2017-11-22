@@ -10,9 +10,10 @@ function timing1(opt){
     opt.i = opt.a;
     ~ function f(){
         if (opt.i <= opt.z) {
-            opt.a == opt.i && opt.onStart(opt);
-            opt.onTiming(opt);
-            opt.z == opt.i && opt.onStop(opt);
+            var copiedOpt = JSON.parse(JSON.stringify(opt));//这里作拷贝，防止过短的delay导致循环体错读到别的opt
+            opt.a == opt.i && opt.onStart(copiedOpt);
+            opt.onTiming(copiedOpt);
+            opt.z == opt.i && opt.onStop(copiedOpt);
             setTimeout(f, opt.delay);
         }
         opt.i += opt.step;
@@ -53,9 +54,10 @@ function timing2(opt){
     opt.i = opt.a;
     ~ function f(){
         if (opt.i <= opt.z) {
-            opt.a == opt.i && opt.onStart(opt);
-            opt.onTiming(opt);
-            opt.z == opt.i && opt.onStop(opt);
+            var copiedOpt = JSON.parse(JSON.stringify(opt));//这里作拷贝，防止过短的delay导致循环体错读到别的opt
+            opt.a == opt.i && opt.onStart(copiedOpt);
+            opt.onTiming(copiedOpt);
+            opt.z == opt.i && opt.onStop(copiedOpt);
             var randAmpl = opt.amplBot + Math.random() * (opt.amplTop - opt.amplBot);
             console.log({randAmpl:randAmpl});
             setTimeout(f, opt.delay + randAmpl);
