@@ -108,9 +108,10 @@ Ltrelib.timing = function(opt){
             }
             
             //核心执行部分
-            opt.a == opt.i && opt.onStart(opt);
-            opt.onTiming(opt);
-            opt.z == opt.i && opt.onStop(opt);
+            var copiedOpt = JSON.parse(JSON.stringify(opt));//这里作拷贝，防止过短的delay导致循环体错读到别的opt
+            opt.a == opt.i && opt.onStart(copiedOpt, copiedOpt);
+            opt.onTiming(copiedOpt);
+            opt.z == opt.i && opt.onStop(copiedOpt);
         }
         opt.i += opt.step;
     }();
