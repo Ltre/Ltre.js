@@ -1,0 +1,44 @@
+<div class="form-group col-sm-2">
+    <label for="formGroupExampleInput">LOGO</label>
+    <img id="up-trigger" class="form-control" src="http://att.bbs.duowan.com/avatar/noavatar_small.jpg">
+    <input type="hidden" id="teamLogo"><span id="up-loading" style="display:none;">上传中..</span>
+    <div id="up-msg"></div>
+</div>
+
+<script src="http://assets.dwstatic.com/common/lib/jquery/1.11.3/jquery-1.11.3.min.js"></script>
+<script src="uploadSetup.js"></script>
+<script>
+    Ltrelib.uploadSetup('img',  $('#up-trigger'), {
+        //上传开始时，一般隐藏结果视图(result)、显示加载中的视图(loading)
+        onUploadStart: function(){
+            $('#up-msg').hide();
+            $('#up-loading').show();
+        },
+        //上传中断或结束时，一般隐藏掉加载中的视图(loading)
+        onUploadEnd: function(){
+            $('#up-loading').hide();
+        },
+        //xhr出错时显示错误信息，并隐藏加载中的视图(loading)
+        onXhrError: function(errMsg){
+            $('#up-msg').css({color:'red'}).text(errMsg).show();
+        },
+        //上传中：一般显示为上传中，渲染百分比
+        showUploading: function(perc){
+            $('#up-loading').text(perc + '%, 上传中..').show();
+        },
+        //等待响应：一般显示为“100%, 上传即将完成..”即可
+        showWaitResponse: function(){
+            $('#up-loading').text('100%, 上传即将完成..').show();
+        },
+        //上传成功时，一般渲染提示信息，并作其它渲染如图片显示
+        onSuccess: function(url, msg, fullRet){
+            $('#teamLogo').val(url);
+            $('#up-msg').css('color', 'green').text("上传成功").show();
+            $('#up-trigger').attr('src', url);
+        },
+        //上传失败时，一般提示错误
+        onFail: function(msg, fullRet){
+            $('#up-msg').css('color', 'red').text(msg).show();
+        }
+    });
+</script>
