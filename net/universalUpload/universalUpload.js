@@ -25,12 +25,12 @@ Ltrelib.universalUpload = function(){
     var that = this;
     var fileInputId;
     var fileInput;
-    var _xhr;
     
     that.api = null;
     that.fileInputName = null;//FormData文件域的名称
     that.bizParams = {};
     that.isMultiple = false;
+    that.uploadWay = 'raw';//raw|jquery
     
     that.onNoFile = function(){};
     that.onBefore = function(files){};
@@ -38,7 +38,7 @@ Ltrelib.universalUpload = function(){
     that.onUploading = function(perc, progressEvt){};
     that.onWaiting = function(){};
     that.onResponse = function(resp){};
-    that.onNetError = function(errMsg, fullErr){};
+    that.onNetError = function(errMsg){};
     that.onEnd = function(){};
     
     var checkSetup = function(){
@@ -57,7 +57,7 @@ Ltrelib.universalUpload = function(){
         return fd;
     };
     
-    var upload = function(formdata){
+    var jQueryUpload = function(formdata){
         $.ajax({
             url: that.api,
             type: 'POST',
@@ -82,7 +82,6 @@ Ltrelib.universalUpload = function(){
                         that.onWaiting();
                     }, false);
                 }
-                _xhr = xhr;
                 return xhr;
             },
             success: function(j){
@@ -90,12 +89,47 @@ Ltrelib.universalUpload = function(){
                 that.onEnd();
             },
             error: function(){
-                var errMsg = '出错了! ['+arguments[2]+']';
-                that.onNetError(errMsg, arguments);
+                //var errMsg = '出错了! ['+arguments[2]+']';
+                var errMsg = '出错了!';
+                console.log(arguments);
+                that.onNetError(errMsg);
                 that.onEnd();
             }
         });
-    }
+    };
+    
+    
+    var upload = function(formdata){
+        var xhr = new XMLHttpRequest();
+        if (xhr.upload) {
+            xhr.upload.addEventListener('progress', function(evt){
+                if (evt.lengthComputable) {
+                    var perc = Math.round(evt.loaded * 100 / evt.total);
+                    if (perc < 100) {
+                        that.onUploading(perc, evt);
+                    }
+                }
+            }, false);
+            xhr.upload.addEventListener('load', function(evt){
+                that.onWaiting();
+            }, false);
+        }
+        xhr.addEventListener('load', function(evt){
+            var jsonText = xhr.responseText;
+            var j = ('JSON' in window && 'parse' in JSON ) ? JSON.parse(jsonText) : eval('('+jsonText+')');
+            that.onResponse(j);
+            that.onEnd();
+        }, false);
+        xhr.addEventListener('error', function(error){
+            var errMsg = '出错了!';
+            console.log(error);
+            that.onNetError(errMsg);
+            that.onEnd();
+        }, false);
+        xhr.open('POST', that.api, true);
+        xhr.withCredentials = true;
+        xhr.send(formdata);
+    };
     
     var onChangeFileInput = function(evt){
         var files = evt.currentTarget.files;
@@ -106,7 +140,12 @@ Ltrelib.universalUpload = function(){
         that.onBefore(files);
         that.onStart();
         var fd = buildFormData(files);
-        upload(fd);
+        //为什么实现两种方式上传？看使用者喜好，可以删掉不需要的方式。目前代码使用非jQuery方式，获取的xhr与使用jQuery方式得到的值不同，具体还在找原因。推荐使用非jQuery方式
+        if (that.uploadWay == 'jquery') { //'jQuery' in window && window.jQuery === window.$
+            jQueryUpload(fd);
+        } else {
+            upload(fd);
+        }
     };
     
     var buildFileInput = function(){
@@ -114,10 +153,6 @@ Ltrelib.universalUpload = function(){
         $('body').append('<input id="' + fileInputId + '" type="file" style="display:none">');
         fileInput = $('#' + fileInputId);
         fileInput.change(onChangeFileInput);
-    };
-    
-    that.getXhr = function(){
-        return _xhr;
     };
     
     //批量设置
