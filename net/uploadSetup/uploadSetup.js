@@ -74,3 +74,32 @@ Ltrelib.uploadSetup = function(widgetType, uiTrigger, callbacks){
         });
     });
 };
+
+/**
+ * 跨域传cookie问题
+ *  1、客户端未设置xhr.withCredentials = true，服务端设置Access-Control-Allow-Origin: *，可跨域成功，但无法传递cookie
+ *  2、客户端已设置xhr.withCredentials = true，则服务端不能将Access-Control-Allow-Origin:设置为*，而必须设置具体的ORIGIN头，即header('Access-Control-Allow-Origin: 'www.abc.com')，且还要设置header('Access-Control-Allow-Credentials: true');
+ *
+ *  综上，不论是否设置xhr.withCredentials=true，都在服务端设置 header('Access-Control-Allow-Origin: '.($_SERVER['HTTP_ORIGIN']?:'*')) 和 header('Access-Control-Allow-Credentials: true')，是最保险的
+ *
+ *  在PHP服务端检测是否设置xhr.withCredentials = true，通常可以通过判断$_SERVER['HTTP_COOKIE']是否存在来确定
+ *
+ * 后端代码部署(PHP示例)：
+ *  1、开始上传前，如果是跨域的POST，则JS会向服务端先发起OPTIONS请求，处理的关键代码为：
+        if (strtolower($_SERVER['REQUEST_METHOD']) === 'options') {
+            header('Access-Control-Allow-Origin: '.($_SERVER['HTTP_ORIGIN']?:'*'));
+            header('Access-Control-Allow-Credentials: true');
+            header(0, 0, 204);
+            exit;
+        }
+    2、上传的POST请求处理代码：
+        $data = array();//业务处理反馈数据
+        $callback = 'callback';
+	    header("Content-Type: application/x-javascript; charset=UTF-8");
+        @header('Access-Control-Allow-Origin: '.($_SERVER['HTTP_ORIGIN']?:'*'));//这是关键代码1
+        header('Access-Control-Allow-Credentials: true');//这是关键代码2
+		$fun = $_REQUEST[$callback];//这里需要具体的参数过滤，防止渗透
+		$json = json_encode($data);
+		echo empty($fun)? $json : "{$fun}({$json})";
+		exit;
+ */
