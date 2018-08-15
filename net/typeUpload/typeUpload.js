@@ -1,6 +1,6 @@
 window.Ltrelib = window.Ltrelib || {};//使用一个生僻的名称作为全局变量，以存储自定义的库，防止与其它变量冲突
 
-Ltrelib.uploadSetup = function(widgetType, uiTrigger, callbacks){
+Ltrelib.typeUpload = function(widgetType, uiTrigger, callbacks){
     callbacks.onUploadStart = callbacks.onUploadStart || function(){};
     callbacks.onUploadEnd = callbacks.onUploadEnd || function(){};
     callbacks.onXhrError = callbacks.onXhrError || function(){};
