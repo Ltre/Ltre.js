@@ -1,0 +1,55 @@
+<div class="form-group col-sm-2">
+    <label for="formGroupExampleInput">LOGO</label>
+    <img id="up-trigger" class="form-control" src="http://att.bbs.duowan.com/avatar/noavatar_small.jpg">
+    <input type="hidden" id="teamLogo"><span id="up-loading" style="display:none;">上传中..</span>
+    <div id="up-msg"></div>
+</div>
+
+<script src="http://assets.dwstatic.com/common/lib/jquery/1.11.3/jquery-1.11.3.min.js"></script>
+<script src="universalUpload-jquery.js"></script>
+<script>
+    var uu = new Ltrelib.universalUpload();
+    uu.api = 'https://mg-admin.duowan.com/jsapi/otherUpload';
+    uu.fileInputName = 'filedata';
+    uu.bizParams = {fileType: 'img'};
+    uu.isMultiple = false;
+    uu.onNoFile = function(){
+        alert('没有选择文件');
+    };
+    uu.onBefore = function(files){
+        alert('已检测到文件，个数：'+files.length+'，准备上传！');
+    };
+    uu.onStart = function(){
+        alert('开始上传..');
+        $('#up-msg').hide();
+        $('#up-loading').show();
+    };
+    uu.onUploading = function(perc, progressEvt){
+        $('#up-loading').text(perc + '%, 上传中..').show();
+    };
+    uu.onWaiting = function(){
+        $('#up-loading').text('100%, 上传即将完成..').show();
+    };
+    uu.onResponse = function(resp){
+        if (resp.code == 0) {
+            $('#teamLogo').val(resp.url);
+            $('#up-msg').css('color', 'green').text("上传成功").show();
+            $('#up-trigger').attr('src', resp.url);
+        } else {
+            if (resp.code == '-4') resp.msg = '文件大小超过限制';
+            $('#up-msg').css('color', 'red').text(resp.msg).show();
+        }
+    };
+    uu.onNetError = function(errMsg, fullErr){
+        debugger
+        console.error(fullErr);
+        $('#up-msg').css({color:'red'}).text(errMsg).show();
+    };
+    uu.onEnd = function(){
+        $('#up-loading').hide();
+    };
+    uu.bindTrigger(function(trigger){
+        $('#up-trigger').click(trigger);
+    });
+
+</script>
