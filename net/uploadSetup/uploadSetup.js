@@ -42,6 +42,7 @@ Ltrelib.uploadSetup = function(widgetType, uiTrigger, callbacks){
             xhr: function(){
                 //捕获上传进度
                 var xhr = $.ajaxSettings.xhr();
+                xhr.withCredentials = true;
                 if (xhr.upload) {
                     xhr.upload.addEventListener('progress', function(evt){
                         if (evt.lengthComputable) {
