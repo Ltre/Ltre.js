@@ -16,10 +16,15 @@ window.Ltrelib = window.Ltrelib || {};//使用一个生僻的名称作为全局�
 //      6、[onNetError]通信错误时执行, 执行完毕后会接着调用onEnd
 //      7、[onEnd]全部流程完成或被中断时，一般用于清理现场
 //设置的条件：
-//  1、设置上传地址
-//  2、设置FormData文件域的名称，例如filedata，核心代码将实现为 var fd = new FormData(); fd.append('filedata', file或files)
-//  3、设置其它参数表，根据具体业务
-//  4、是否多文件上传
+//  1、[api]设置上传地址
+//  2、[fileInputName]设置FormData文件域的名称，例如filedata，核心代码将实现为 var fd = new FormData(); fd.append('filedata', file或files)
+//  3、[bizParams]设置其它参数表，根据具体业务
+//  4、[isMultiple]是否多文件上传
+//  5、[uploadWay]上传途径：raw|jquery
+//  6、[respType]响应类型：默认使用json响应, 全部值：xml,html,script,json,text。
+//               因上传不适用GET，故不含jsonp。
+//               在jQuery上传模式下，支持全部值；
+//               在原生AJAX上传模式下，仅支持json和text
 Ltrelib.universalUpload = function(){
 
     var that = this;
@@ -27,10 +32,11 @@ Ltrelib.universalUpload = function(){
     var fileInput;
     
     that.api = null;
-    that.fileInputName = null;//FormData文件域的名称
+    that.fileInputName = null;
     that.bizParams = {};
     that.isMultiple = false;
-    that.uploadWay = 'raw';//raw|jquery
+    that.uploadWay = 'raw';
+    that.respType = 'json';
     
     that.onNoFile = function(){};
     that.onBefore = function(files){};
@@ -44,6 +50,7 @@ Ltrelib.universalUpload = function(){
     var checkSetup = function(){
         if (!that.api || !/^(https?\:)?\/\//.test(that.api)) throw new Error("上传接口有误");
         if (!that.fileInputName) throw new Error("文件域未命名");
+        if (-1 === ['xml', 'html', 'script', 'json', 'text'].indexOf(that.respType)) throw new Error("响应类型设置有误");
     };
     
     var buildFormData = function(files){
@@ -57,31 +64,45 @@ Ltrelib.universalUpload = function(){
         return fd;
     };
     
+    var isJson = function(respText){//不通过直接JSON.parse或eval执行验证，防止XSS
+        return /^[\],:{}\s]*$/.test(
+            respText.replace(
+                /\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, "@"
+            ).replace(
+                /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]"
+            ).replace(/(?:^|:|,)(?:\s*\[)+/g, "")
+        );
+    };
+    
+    var xhrUpstreamMonitor = function(xhr){
+        if (xhr.upload) {
+            xhr.upload.addEventListener('progress', function(evt){
+                if (evt.lengthComputable) {
+                    var perc = Math.round(evt.loaded * 100 / evt.total);
+                    if (perc < 100) {
+                        that.onUploading(perc, evt);
+                    }
+                }
+            }, false);
+            xhr.upload.addEventListener('load', function(evt){
+                that.onWaiting();
+            }, false);
+        }
+    };
+
     var jQueryUpload = function(formdata){
         $.ajax({
             url: that.api,
             type: 'POST',
             data: formdata,
-            dataType: 'json',
+            dataType: that.respType,
             contentType: false, //必须设置false才会避开jQuery对 formdata 的默认处理 XMLHttpRequest会对 formdata 进行正确的处理
             processData: false, //必须设置false才会自动加上正确的Content-Type
             xhr: function(){
                 //捕获上传进度
                 var xhr = $.ajaxSettings.xhr();
                 xhr.withCredentials = true;
-                if (xhr.upload) {
-                    xhr.upload.addEventListener('progress', function(evt){
-                        if (evt.lengthComputable) {
-                            var perc = Math.round(evt.loaded * 100 / evt.total);
-                            if (perc < 100) {
-                                that.onUploading(perc, evt);
-                            }
-                        }
-                    }, false);
-                    xhr.upload.addEventListener('load', function(evt){
-                        that.onWaiting();
-                    }, false);
-                }
+                xhrUpstreamMonitor(xhr);
                 return xhr;
             },
             success: function(j){
@@ -97,27 +118,19 @@ Ltrelib.universalUpload = function(){
             }
         });
     };
-    
-    
+
     var upload = function(formdata){
         var xhr = new XMLHttpRequest();
-        if (xhr.upload) {
-            xhr.upload.addEventListener('progress', function(evt){
-                if (evt.lengthComputable) {
-                    var perc = Math.round(evt.loaded * 100 / evt.total);
-                    if (perc < 100) {
-                        that.onUploading(perc, evt);
-                    }
-                }
-            }, false);
-            xhr.upload.addEventListener('load', function(evt){
-                that.onWaiting();
-            }, false);
-        }
+        xhrUpstreamMonitor(xhr);
         xhr.addEventListener('load', function(evt){
-            var jsonText = xhr.responseText;
-            var j = ('JSON' in window && 'parse' in JSON ) ? JSON.parse(jsonText) : eval('('+jsonText+')');
-            that.onResponse(j);
+            var resp = xhr.responseText;
+            if (that.respType == 'json') {//暂时仅处理json，其它类型原样传递
+                if (! isJson(resp)) {
+                    throw new Error("响应内容有误，期望类型[json]");
+                }
+                resp = ('JSON' in window && 'parse' in JSON ) ? JSON.parse(resp) : eval('('+resp+')');
+            }
+            that.onResponse(resp);
             that.onEnd();
         }, false);
         xhr.addEventListener('error', function(error){
@@ -159,7 +172,7 @@ Ltrelib.universalUpload = function(){
     that.setup = function(map){
         if ('object' != typeof map) throw new Error('map参数有误');
         var keys = [
-            'api', 'fileInputName', 'bizParams', 'isMultiple',
+            'api', 'fileInputName', 'bizParams', 'isMultiple', 'uploadWay', 'respType',
             'onNoFile', 'onBefore', 'onStart', 'onUploading', 'onWaiting', 'onResponse', 'onEnd'
         ];
         for (var i in keys) {
