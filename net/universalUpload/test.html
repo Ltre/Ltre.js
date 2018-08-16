@@ -40,9 +40,7 @@
             $('#up-msg').css('color', 'red').text(resp.msg).show();
         }
     };
-    uu.onNetError = function(errMsg, fullErr){
-        debugger
-        console.error(fullErr);
+    uu.onNetError = function(errMsg){
         $('#up-msg').css({color:'red'}).text(errMsg).show();
     };
     uu.onEnd = function(){

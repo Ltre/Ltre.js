@@ -42,8 +42,6 @@
         }
     };
     uu.onNetError = function(errMsg, fullErr){
-        debugger
-        console.error(fullErr);
         $('#up-msg').css({color:'red'}).text(errMsg).show();
     };
     uu.onEnd = function(){
