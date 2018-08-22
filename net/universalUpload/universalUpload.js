@@ -64,13 +64,17 @@ Ltrelib.universalUpload = function(){
         return fd;
     };
     
-    var isJson = function(respText){//不通过直接JSON.parse或eval执行验证，防止XSS
+    var isJson = function(respText){
+        var r1 = /\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g;
+        var r2 = /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g;
+        var r3 = /(?:^|:|,)(?:\s*\[)+/g;
+        //不通过直接JSON.parse或eval执行验证，防止XSS
         return /^[\],:{}\s]*$/.test(
             respText.replace(
-                /\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, "@"
+                r1, "@"
             ).replace(
-                /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]"
-            ).replace(/(?:^|:|,)(?:\s*\[)+/g, "")
+                r2, "]"
+            ).replace(r3, "")
         );
     };
     
