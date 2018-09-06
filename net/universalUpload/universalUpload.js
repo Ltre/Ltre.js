@@ -154,7 +154,9 @@ Ltrelib.universalUpload = function(){
             that.onNoFile();
             return false;
         }
-        that.onBefore(files);
+        if (! that.onBefore(files)) {
+            return false;
+        }
         that.onStart();
         var fd = buildFormData(files);
         //为什么实现两种方式上传？看使用者喜好，可以删掉不需要的方式。目前代码使用非jQuery方式，获取的xhr与使用jQuery方式得到的值不同，具体还在找原因。推荐使用非jQuery方式

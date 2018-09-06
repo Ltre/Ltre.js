@@ -19,6 +19,7 @@
     };
     uu.onBefore = function(files){
         alert('已检测到文件，个数：'+files.length+'，准备上传！');
+        return true;
     };
     uu.onStart = function(){
         alert('开始上传..');
