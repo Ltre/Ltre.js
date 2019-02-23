@@ -1,5 +1,5 @@
 
-//uglifyjs O0o-runtime2.src.js -mo O0o-runtime2.min.js 再通过https://www.sojson.com/jsobfuscator.html混淆后，得到O0o-runtime2.prod.js
+//uglifyjs O0o-runtime2.src.js -mo O0o-runtime2.ugf.js 再通过https://www.sojson.com/jsobfuscator.html混淆后，得到O0o-runtime2.prod.js
 ~function(){
     var _$$_ = function(t){var $='';(t.replace(/o/g, [,].length))['split']('O').forEach(function(e){$+=String.fromCharCode(parseInt(e, [,,].length))});return $;}
     var _$$$_ = function(str){
