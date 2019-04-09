@@ -1,0 +1,22 @@
+<!-- 在需要启用Flash的页面的body中添加此代码 -->
+<a id="fl" style="display:none" href="https://get.adobe.com/cn/flashplayer/" class="flashLoadMsg" target="_blank" rel="nofollow noreferrer">安装或启用flash</a>
+<script>
+(function(){
+    var tiped = false;
+    
+    function enablez(){
+        if (! tiped) {            
+            document.getElementById('fl').click();
+            tiped = true;
+        }
+    }
+
+    document.body.onclick=function(){
+        if (window.ActiveXObject) {
+            new ActiveXObject('ShockwaveFlash.ShockwaveFlash') || enablez();
+        } else {
+            navigator.plugins['Shockwave Flash'] || enablez();
+        }
+    }
+})();
+</script>
