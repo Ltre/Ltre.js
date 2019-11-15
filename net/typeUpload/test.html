@@ -1,7 +1,7 @@
 <div class="form-group col-sm-2">
     <label for="formGroupExampleInput">LOGO</label>
     <img id="up-trigger" class="form-control" src="http://att.bbs.duowan.com/avatar/noavatar_small.jpg">
-    <input type="hidden" id="teamLogo"><span id="up-loading" style="display:none;">上传中..</span>
+    <input type="hidden" id="logo"><span id="up-loading" style="display:none;">上传中..</span>
     <div id="up-msg"></div>
 </div>
 
@@ -32,7 +32,7 @@
         },
         //上传成功时，一般渲染提示信息，并作其它渲染如图片显示
         onSuccess: function(url, msg, fullRet){
-            $('#teamLogo').val(url);
+            $('#logo').val(url);
             $('#up-msg').css('color', 'green').text("上传成功").show();
             $('#up-trigger').attr('src', url);
         },
