@@ -1,0 +1,265 @@
+<div class="row-fluid">
+    <div class="form-group col-sm-6">
+        <h1 for="">比赛名：<a href="/matches/edit?match_id=<{$match.match_id}>" target="_blank"><{$match.match_name}></a> - [ID=<{$match.match_id}>]</h1>
+        <div order="0" class="team-area team-area-tpl from-group col-sm-6 dropdown" style="margin-bottom: 10px; display: none; clear:both;">
+            <label>比赛结果：<span class="result-show">未设置</span></label>
+            <input class="dropdown-toggle form-control team-input-show" type="text" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display: inherit; width: inherit;">
+            <button class="set-win-team btn btn-sm btn-success">设为胜利</button>
+            <button class="undo-team btn btn-sm btn-default">撤销设置</button>
+            <button class="up-team btn btn-sm btn-info">上</button>
+            <button class="down-team btn btn-sm btn-dark">下</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="del-team btn btn-sm btn-danger">移除</button>
+            <input type="hidden" class="team-input-value">
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item team-list-prev" data-p="1" data-kw="" href="javascript:;" style="text-align:center;">←</a>
+                <a class="dropdown-item team-one team-one-tpl" style="display: none" href="javascript:;"><img width="36" height="36"> - <span></span></a>
+                <a class="dropdown-item team-list-next" data-p="2" data-kw="" href="javascript:;" style="text-align:center;">→</a>
+            </div>
+            <br><br>
+        </div>
+        <a class="add-team form-inline" href="javascript:;" style="font-weight:bold; font-size:15px; margin-left:10px;">+追加队伍</a>
+        <br>
+        <div class="form-group">
+            <button id="sbm" class="btn btn-sm btn-primary">应用以上更改</button>
+            <br><br>
+            <div style="color:lightslategray; font-size: 10px;">贴士：</div>
+            <div style="color:red; font-size: 10px;">专为球球大作战等超过两队参赛的需求开发，1V1活动的管理员请忽略</div>
+            <div style="color:lightslategray; font-size: 10px;">参赛队伍的位置，可以上下调整，靠上的排名靠前</div>
+            <div style="color:lightslategray; font-size: 10px;">移动的时候，变成橙色的表示移动后的队伍，灰色表示原位置被挤进来的队伍</div>
+            <div style="color:lightslategray; font-size: 10px;">特别说明，如果队伍被设置为“胜利”，则其排名会自动上浮</div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(function(){
+
+
+    //战队列表搜索、加载
+    function teamDropdown(area){
+
+        var loadTeams = function(kw, p, limit){
+            kw = kw || '';
+            p = p || 1;
+            limit = limit || 6;
+            var next = area.find('.team-list-next');
+            var prev = area.find('.team-list-prev');
+            var url = '/team/search';
+            $.get(url, {kw:kw, p:p, limit:limit}, function(j){
+                area.find('.team-one').not('.team-one-tpl').remove();
+                for (var l of j.list) {
+                    var newItem = area.find('.team-one-tpl').clone();
+                    newItem.data('teamid', l.team_id);
+                    newItem.children('img').attr('src', l.team_logo);
+                    newItem.children('span').text('[ID=' + l.team_id + '] - ' + l.team_name);
+                    newItem.removeClass('team-one-tpl').css('display', 'block');
+                    newItem.click(function(){
+                        area.find('.team-input-show').val($(this).children('span').text());
+                        area.find('.team-input-value').val($(this).data('teamid'));
+                        area.attr('teamid', $(this).data('teamid'));//在区域父标签标记好teamid属性
+                    });
+                    area.find('.team-one:last').after(newItem);
+                }
+                if (j.pages && 'next_page' in j.pages) {
+                    next.data('kw', kw);
+                    next.data('p', j.pages.next_page).show();
+                } else {
+                    next.hide();
+                }
+                if (j.pages && 'prev_page' in j.pages) {
+                    prev.data('kw', kw);
+                    prev.data('p', j.pages.prev_page).show();
+                } else {
+                    prev.hide();
+                }
+                //调整位置，当数据少时，保持跟输入框贴合。判断class.show的逻辑，不要删除，否则导致下拉列表无法关闭。不用深究，这属于bootstrap的问题
+                if (area.hasClass('show')) {
+                    //area.dropdown('update');//出现了遮挡情况，先屏蔽  @date 20180601
+                }
+            }, 'jsonp');
+        };
+
+        var bindInput = function(){
+            area.find('.team-input-show').keyup(function(evt){
+                if (evt.keyCode == 38 || evt.key == 'ArrowUp') {
+                    area.find('.team-one').not('.team-one-tpl').last().focus();
+                } else if (evt.keyCode == 40 || evt.key == 'ArrowDown') {
+                    area.find('.team-one').not('.team-one-tpl').first().focus();
+                } else {
+                    var kw = $(this).val();
+                    loadTeams(kw);
+                }
+                if (! area.hasClass('show') && evt.keyCode != 27 && evt.key != 'Escape') {
+                    $(this).click();//没有弹出选择框时，强制弹出。按下ESC除外
+                }
+            })
+        };
+
+        var bindPaging = function(){
+            area.find('.team-list-prev,.team-list-next').click(function(){
+                var p = $(this).data('p');
+                var kw = $(this).data('kw');
+                loadTeams(kw, p);
+                return false;
+            });
+        };
+
+        this.setTeam = function(team_id){
+            if (team_id) {
+                $.getJSON('/team/getById', {team_id: team_id}, function(team){
+                    if (team) {
+                        area.find('.team-input-value').val(team_id);
+                        area.find('.team-input-show').val("[ID=" + team_id + "] - " + team.team_name);
+                    } else {
+                        console.error('/team/getById ERROR!');
+                    }
+                });
+            }
+        };
+
+        loadTeams();
+        bindInput();
+        bindPaging();
+    }
+
+
+    function addTeam(team_id, result){
+        team_id = team_id || 0;
+        result = result || 0;
+        result = team_id==0?0:result;
+        var newTeam = $('.team-area-tpl').clone();
+        var order = +$('.team-area:last .team-order').val() + 1;
+        newTeam.find('.team-order').val(order);
+        newTeam.attr('order', order);
+        newTeam.attr('teamid', team_id);
+        newTeam.attr('result', result);
+        newTeam.find('.result-show').text(['未设置', '胜利'][result]).css('color', ['', 'green'][result]);
+        newTeam.removeClass('team-area-tpl').show();
+        $('.team-area:last').after(newTeam);
+        new teamDropdown(newTeam).setTeam(team_id);
+    }
+
+
+    function loadTeamsByMatch(match_id){
+        $.getJSON('/matches/teams', {match_id: match_id, req: 'getjson'}, function(teams){
+            $.each(teams, function(i, e){
+                addTeam(e.team_id, e.result);
+            });
+        });
+    }
+
+
+    function bindAppend(){
+        $('.add-team').click(function(){ addTeam(0); });
+    }
+
+
+    function bindSetWinTeam(){
+        $('body').on('click', '.set-win-team', function(){
+            var teamArea = $(this).parents('.team-area');
+            teamArea.attr('result', 1);
+            teamArea.find('.result-show').css('color', 'green').text('胜利');
+        });
+    }
+
+
+    function bindUndoTeam(){
+        $('body').on('click', '.undo-team', function(){
+            var teamArea = $(this).parents('.team-area');
+            teamArea.attr('result', 0);
+            teamArea.find('.result-show').css('color', '').text('未设置');
+        });
+    }
+
+
+    function lightTeamArea(teamArea, nearArea){
+        $('.team-area:not(.team-area-tpl)').css('border', 'inherit');
+        teamArea.css('border', '3px dotted orange');
+        nearArea.css('border', '3px dotted gray');
+    }
+
+
+    function goUp(teamArea){
+        var prev = teamArea.prev('.team-area:not(.team-area-tpl)');
+        if (prev.size() == 1) {
+            prev.before(teamArea);
+            lightTeamArea(teamArea, prev);
+        }
+    }
+
+
+    function bindUp(){
+        $('body').on('click', '.up-team', function(){
+            var teamArea = $(this).parents('.team-area');
+            goUp(teamArea);
+        });
+    }
+
+
+    function goDown(teamArea){
+        var next = teamArea.next('.team-area');
+        if (next.size() == 1) {
+            next.after(teamArea);
+            lightTeamArea(teamArea, next);
+        }
+    }
+
+
+    function bindDown(){
+        $('body').on('click', '.down-team', function(){
+            var teamArea = $(this).parents('.team-area');
+            goDown(teamArea);
+        });
+    }
+
+
+    function bindDel(){
+        $('body').on('click', '.del-team', function(){
+            $(this).parents('.team-area').remove();
+            //location.href = location.href.match(/.+#?$/)[0].trim('#') + '#' + 'match-具体ID';
+        });
+    }
+
+
+    function bindSubmit(){
+        $('#sbm').click(function(){
+            if (! confirm('确定更改吗？')) return false;
+            var setup = [], wait = [];
+            $('.team-area:not(.team-area-tpl)').each(function(i, e){
+                var team_id = parseInt($(this).attr('teamid'));
+                var result = parseInt($(this).attr('result'));
+                var data = {team_id: team_id, result: result};
+                if (team_id) {
+                    if (result == 1) {
+                        setup.push(data);//赢的先入
+                    } else {
+                        wait.push(data);
+                    }
+                }
+            });
+            for (var i in wait) setup.push(wait[i]);
+            $.post('/matches/teams', {match_id: "<{$match_id}>", req: 'post', team_setup: setup}, function(j){
+                alert(j.msg);
+                if (j.rs) location.reload();
+            }, 'json');
+        });
+    }
+
+
+    loadTeamsByMatch("<{$match_id}>");
+    bindAppend();
+    bindSetWinTeam();
+    bindUndoTeam();
+    bindUp();
+    bindDown();
+    bindDel();
+    bindSubmit();
+
+    if (CookieUtil.get('has_atches_teams_page_tip') != 1) {
+        alert('专为球球大作战这类超过两队参赛的需求开发，1V1活动的管理员可以忽略绕道');
+        CookieUtil.set('has_atches_teams_page_tip', 1, 86400*7);
+    }
+
+});
+</script>
