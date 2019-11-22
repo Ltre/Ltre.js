@@ -74,7 +74,6 @@ function id2valueRender(sourceSelector, apiUrl, idField, userRender, userGetIdFr
 
                     var param = {};
                     param[idField || 'mgrId'] = id;
-                    debugger;
                     $.get(
                         apiUrl || '/manager/getById', 
                         param,
