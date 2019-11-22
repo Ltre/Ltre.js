@@ -3,7 +3,7 @@
  * 
  * 杜绝重复请求，提高渲染效率
  * 
- * 前端依赖：jQuery, LtreLib.timing
+ * 前端依赖：jQuery, Ltrelib.timing
  * 接口要求：仅可定义一个ID参数，参数名可自定义
  * 
  * @param {String} sourceSelector 被替换ID所在DOM的JQ选择器，支持选择结果为单项和多项
@@ -59,7 +59,7 @@ function id2valueRender(sourceSelector, apiUrl, idField, userRender, userGetIdFr
         return (userGetIdFromWidget || defaultGetIdFromWidget).apply(this, arguments);
     }
 
-    LtreLib.timing({
+    Ltrelib.timing({
         a: 0,
         z: $(sourceSelector).size() - 1,
         delay: 30,//建议25～75，视接口响应时间来定
