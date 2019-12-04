@@ -1,0 +1,22 @@
+如果 a设0，又想只走一步，那么z设0是无效的，因为z会被忽略，变成100，最终会走101步
+
+解决方案：a设1，z也设1
+
+在配合jquery的eq()选择器使用时，建议采用a=1, z=n的方案，在具体的timing循环中，eq表达式这样写：eq(opt.i - 1)
+就可以正确遍历n个选择器结果
+
+
+
+
+
+示例：
+
+
+    LtreLib.timing({
+        a: 1,
+        z: $(sourceSelector).size(),
+        delay: 30,//建议25～75，视接口响应时间来定
+        onTiming: function(opt){
+            console.log($(sourceSelector + ':eq(' + (opt.i-1) + ')'));
+        }
+    });
