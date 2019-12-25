@@ -1,0 +1,116 @@
+
+<!-- TODO: 基本完善，待提升安全性 -->
+
+<div class="row-fluid card">
+    <h4 class="card-header">
+        模板明细
+        <{if $tpl}>
+            - 编辑 - [ID=<span id="tplId"><{$tpl.tpl_id}></span>]
+            - <a id="thisAddr" href="javascript:;" data-clipboard-text="<{$link}>"><{if $tplType eq 'tpl'}>本篇地址<{else}>示例地址<{/if}></a>
+            |
+            <a class="grammar" data-clipboard-text="{[模板=<{$tpl.tpl_name}>]}" href="javascript:;">引用</a>
+            |
+            <a class="grammar" data-clipboard-text="{[模板=<{$tpl.tpl_name}>;专区=<{$tpl.channel}>]}" href="javascript:;">引用(跨区)</a>
+        <{else}><span style="color: royalblue;"> - 新建</span><{/if}></h5>
+    <form class="card-body"><!-- 原card-body col-12 -->
+        <div class="form-row">
+        <div class="form-group">
+            <label for="content" style="margin-bottom: 2px;">模板内容<span style="color:red;">（高亮语法开发中）</span></label>
+            <div class="form-control">
+                <textarea id="content"><{$content}></textarea>
+            </div>
+        </div>
+        </div>
+    </form>
+</div   >
+
+
+<!-- ######################## CODE MIRROR 区域 - 开始 ######################## -->
+
+
+<!--codemirror基本-->
+<script src="/res/lib/codemirror/5.50.0/lib/codemirror.js"></script>
+<link rel="stylesheet" href="/res/lib/codemirror/5.50.0/lib/codemirror.css">
+
+<!--指定样式-->
+<link rel="stylesheet" href="/res/lib/codemirror/5.50.0/theme/idea.css">
+
+<!--codemirror语法-->
+<script src="/res/lib/codemirror/5.50.0/mode/css/css.js"></script>
+<script src="/res/lib/codemirror/5.50.0/mode/xml/xml.js"></script>
+<script src="/res/lib/codemirror/5.50.0/mode/htmlmixed/htmlmixed.js"></script>
+<script src="/res/lib/codemirror/5.50.0/mode/javascript/javascript.js"></script>
+
+<!--codemirror其他支持-->
+<link href="/res/lib/codemirror/5.50.0/addon/fold/foldgutter.css" rel="stylesheet">
+<script src="/res/lib/codemirror/5.50.0/addon/fold/foldgutter.js"></script>
+<script src="/res/lib/codemirror/5.50.0/addon/fold/foldcode.js"></script>
+
+<link href="/res/lib/codemirror/5.50.0/addon/display/fullscreen.css" rel="stylesheet">
+<script src="/res/lib/codemirror/5.50.0/addon/display/fullscreen.js"></script>
+
+<script src="/res/lib/codemirror/5.50.0/addon/selection/active-line.js"></script> 
+<script src="/res/lib/codemirror/5.50.0/addon/edit/matchbrackets.js"></script>
+
+<script src="/res/lib/codemirror/5.50.0/addon/hint/show-hint.js"></script>
+<link href="/res/lib/codemirror/5.50.0/addon/hint/show-hint.css" rel="stylesheet">
+
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById('content'), {
+        styleActiveLine: true,
+        lineNumbers: true,
+        tabMode: "indent",
+        indentUnit: 4,
+        smartIndent: true,
+        autoCloseBrackets : true,   //括号自动闭合
+        matchBrackets : true,       //括号匹配
+        smartIndent: false,        //块缩进关闭
+        foldGutter: true,
+        dragDrop: true,
+        //allowDropFileTypes: [],
+        mode: "text/html"
+    });
+    editor.setOption("theme", 'idea');//idea > panda-syntax > eclipse > neat > ttcn > xq-light > mbo > oceanic-next > nord > monokai > mdn-like
+    editor.setOption("mode", 'htmlmixed');
+    editor.setSize('auto', '500px');
+
+    editor.setOption("extraKeys", {
+        Tab: function(cm){
+            var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+            cm.replaceSelection(spaces);
+        },
+        "F11": function(cm){
+            cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+        },
+        "Esc": function(cm){
+            if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+        },
+        "'('": (cm) => {
+            const cur = cm.getCursor();
+            cm.replaceRange('()', cur, cur, '+insert');
+            cm.doc.setCursor({ line: cur.line, ch: cur.ch + 1 });
+        },
+        "'['": (cm) => {
+            const cur = cm.getCursor();
+            cm.replaceRange('[]', cur, cur, '+insert');
+            cm.doc.setCursor({ line: cur.line, ch: cur.ch + 1 });
+        },
+        "'<'": (cm) => {
+            const cur = cm.getCursor();
+            cm.replaceRange('<>', cur, cur, '+insert');
+            cm.doc.setCursor({ line: cur.line, ch: cur.ch + 1 });
+        },
+        "'{'": (cm) => {
+            const cur = cm.getCursor();
+            cm.replaceRange('{}', cur, cur, '+insert');
+            cm.doc.setCursor({ line: cur.line, ch: cur.ch + 1 });
+        },
+        "'\''": (cm) => {
+            const cur = cm.getCursor();
+            cm.replaceRange('\'\'', cur, cur, '+insert');
+            cm.doc.setCursor({ line: cur.line, ch: cur.ch + 1 });
+        }
+    });
+</script>
+
+<!-- ######################## CODE MIRROR 区域 - 结束 ######################## -->
