@@ -28,13 +28,15 @@ window.Ltrelib = window.Ltrelib || {};//使用一个生僻的名称作为全局�
 Ltrelib.universalUpload = function(){
 
     var that = this;
+    var raw = {};
     var fileInputId;
     var fileInput;
-    
+
     that.api = null;
     that.fileInputName = null;
     that.bizParams = {};
     that.isMultiple = false;
+    that.acceptMime = '';
     that.uploadWay = 'raw';
     that.respType = 'json';
     
@@ -46,7 +48,20 @@ Ltrelib.universalUpload = function(){
     that.onResponse = function(resp){};
     that.onNetError = function(errMsg){};
     that.onEnd = function(){};
-    
+
+    setInterval(function(){
+        let ifThenMap = {
+            isMultiple: buildFileInput,//监听并重载上传控件
+            acceptMime: buildFileInput//监听并重载上传控件
+        };
+        for (k in ifThenMap){
+            if (!(k in raw) || raw[k] !== that[k]) {
+                raw[k] = that[k];
+                ifThenMap[k].call(that);
+            }
+        }
+    }, 250);
+
     var checkSetup = function(){
         if (!that.api || !/^(https?\:)?\/\//.test(that.api)) throw new Error("上传接口有误");
         if (!that.fileInputName) throw new Error("文件域未命名");
@@ -55,7 +70,11 @@ Ltrelib.universalUpload = function(){
     
     var buildFormData = function(files){
         var fd = new FormData();
-        fd.append(that.fileInputName, that.isMultiple ? files : files[0]);
+        if (that.isMultiple) {
+            for (var f of files) fd.append(`${that.fileInputName}[]`, f);
+        } else {
+            fd.append(that.fileInputName, files[0]);
+        }
         for (var i in that.bizParams) {
             if ('function' != typeof that.bizParams[i]) {
                 fd.append(i, that.bizParams[i]);
@@ -168,10 +187,20 @@ Ltrelib.universalUpload = function(){
     };
     
     var buildFileInput = function(){
-        fileInputId = 'fuckFile' + (+ new Date()) + Math.floor(Math.random()*100000);
-        $('body').append('<input id="' + fileInputId + '" type="file" style="display:none">');
-        fileInput = $('#' + fileInputId);
-        fileInput.change(onChangeFileInput);
+        if (! fileInputId) {
+            fileInputId = 'fuckFile' + (+ new Date()) + Math.floor(Math.random()*100000);
+            let htmlMulti = that.isMultiple ? ' multiple="1" ' : '';
+            let htmlAcceptMime = that.acceptMime ? ` accept="${that.acceptMime}" ` : '';
+            let htmlInput = `<input id="${fileInputId}" type="file" ${htmlMulti} ${htmlAcceptMime} style="display:none">`;
+            $('body').append(htmlInput);
+            fileInput = $('#' + fileInputId);
+            fileInput.change(onChangeFileInput);
+        } else {
+            let attrs = {};
+            that.acceptMime && (attrs.accept = that.acceptMime);
+            that.isMultiple && (attrs.multiple = true);
+            $('#' + fileInputId).attr(attrs);
+        }
     };
     
     //批量设置
@@ -201,8 +230,6 @@ Ltrelib.universalUpload = function(){
             fileInput.click();
         });
     };
-    
-    buildFileInput();
-    
-};
 
+    buildFileInput();
+};
