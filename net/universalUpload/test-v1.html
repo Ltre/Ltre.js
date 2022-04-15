@@ -1,15 +1,15 @@
 <div class="form-group col-sm-2">
     <label for="formGroupExampleInput">LOGO</label>
     <img id="up-trigger" class="form-control" src="http://att.bbs.duowan.com/avatar/noavatar_small.jpg">
-    <input type="hidden" id="teamLogo"><span id="up-loading" style="display:none;">上传中..</span>
+    <input type="hidden" id="logo"><span id="up-loading" style="display:none;">上传中..</span>
     <div id="up-msg"></div>
 </div>
 
 <script src="http://assets.dwstatic.com/common/lib/jquery/1.11.3/jquery-1.11.3.min.js"></script>
-<script src="universalUpload.js"></script>
+<script src="/res/lib/universalUpload/universalUpload.js"></script>
 <script>
     var uu = new Ltrelib.universalUpload();
-    uu.api = 'https://ad.duowan.com/?r=test/otherUpload';
+    uu.api = '/jsapi/otherUpload';
     uu.fileInputName = 'filedata';
     uu.bizParams = {fileType: 'img'};
     uu.isMultiple = false;
@@ -33,7 +33,7 @@
     };
     uu.onResponse = function(resp){
         if (resp.code == 0) {
-            $('#teamLogo').val(resp.url);
+            $('#logo').val(resp.url);
             $('#up-msg').css('color', 'green').text("上传成功").show();
             $('#up-trigger').attr('src', resp.url);
         } else {
