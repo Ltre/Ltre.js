@@ -1,0 +1,95 @@
+<?php
+
+return array (
+  0 => 
+  array (
+    'id' => '7',
+    'batch_id' => '1',
+    'model_no' => 'ABC-1',
+    'color' => '白色',
+    'size_zh' => '40',
+    'quantity' => '50',
+    'img' => 'http://static.ouj.com/shoes-game/9eff6c84617dd4add37dbe798f83f40c_size580x580_60318.jpg',
+    'model_name' => '诶币瑟',
+    'gender' => '2',
+    'style' => '跑鞋',
+  ),
+  1 => 
+  array (
+    'id' => '5',
+    'batch_id' => '1',
+    'model_no' => 'ABC-1',
+    'color' => '白色',
+    'size_zh' => '41',
+    'quantity' => '600',
+    'img' => 'http://static.ouj.com/shoes-game/9eff6c84617dd4add37dbe798f83f40c_size580x580_60318.jpg',
+    'model_name' => '诶币瑟',
+    'gender' => '2',
+    'style' => '跑鞋',
+  ),
+  2 => 
+  array (
+    'id' => '1',
+    'batch_id' => '1',
+    'model_no' => 'ABC-1',
+    'color' => '绿色',
+    'size_zh' => '39',
+    'quantity' => '100',
+    'img' => 'http://static.ouj.com/shoes-game/9eff6c84617dd4add37dbe798f83f40c_size580x580_60318.jpg',
+    'model_name' => '诶币瑟',
+    'gender' => '2',
+    'style' => '跑鞋',
+  ),
+  3 => 
+  array (
+    'id' => '2',
+    'batch_id' => '1',
+    'model_no' => 'ABC-1',
+    'color' => '黄色',
+    'size_zh' => '45',
+    'quantity' => '50',
+    'img' => 'http://static.ouj.com/shoes-game/9eff6c84617dd4add37dbe798f83f40c_size580x580_60318.jpg',
+    'model_name' => '诶币瑟',
+    'gender' => '2',
+    'style' => '跑鞋',
+  ),
+  4 => 
+  array (
+    'id' => '6',
+    'batch_id' => '1',
+    'model_no' => 'DEF-2',
+    'color' => '红色',
+    'size_zh' => '42',
+    'quantity' => '500',
+    'img' => 'http://static.ouj.com/shoes-game/9eff6c84617dd4add37dbe798f83f40c_size580x580_60318.jpg',
+    'model_name' => '地易富',
+    'gender' => '0',
+    'style' => '休闲',
+  ),
+  5 => 
+  array (
+    'id' => '3',
+    'batch_id' => '1',
+    'model_no' => 'DEF-2',
+    'color' => '蓝色',
+    'size_zh' => '42',
+    'quantity' => '80',
+    'img' => 'http://static.ouj.com/shoes-game/9eff6c84617dd4add37dbe798f83f40c_size580x580_60318.jpg',
+    'model_name' => '地易富',
+    'gender' => '0',
+    'style' => '休闲',
+  ),
+  6 => 
+  array (
+    'id' => '4',
+    'batch_id' => '1',
+    'model_no' => 'DEF-2',
+    'color' => '黑色',
+    'size_zh' => '40',
+    'quantity' => '300',
+    'img' => 'http://static.ouj.com/shoes-game/9eff6c84617dd4add37dbe798f83f40c_size580x580_60318.jpg',
+    'model_name' => '地易富',
+    'gender' => '0',
+    'style' => '休闲',
+  ),
+);

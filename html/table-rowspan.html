@@ -1,0 +1,75 @@
+<script src="/res/lib/md5.min.js"></script>
+
+<script>
+    window.ppGlobals = {
+        currPrdId: 0
+    };
+</script>
+
+
+<div class="row-fluid card">
+    <h4 class="card-header">
+        成品列表管理 | <a href="/produce/batches">返回批次列表</a>
+    </h4>
+    <div class="card-body">
+        <div class="row">
+            <table class="col-sm-6 table table-bordered">
+                <thead>
+                    <tr>
+                        <th>型号</th>
+                        <th>颜色</th>
+                        <th>码数</th>
+                        <th>件数</th>
+                        <th>成品图</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <{foreach $products as $v}>
+                    <tr>
+                        <td rowspanSelector="<{md5($v.model_no)}>" data-model_no="<{$v.model_no}>"><{$v.model_name}><br>(<{$v.model_no}>|<{$sm->genderMap[$v.gender]}>,<{$v.style}>)</td>
+                        <td rowspanSelector="<{md5(concatStr($v.model_no, $v.color))}>" data-color="<{$v.color}>"><{$v.color}></td><!--@todo: 有空再用背景色优化展示-->
+                        <td rowspanSelector="<{md5(concatStr($v.model_no, $v.color, $v.quantity))}>" data-size_zh="<{$v.size_zh}>"><{$v.size_zh}></td>
+                        <td data-quantity="<{$v.quantity}>"><{$v.quantity}></td>
+                        <td data-img="<{$v.img}>"><img src="<{$v.img}>" width="120"></td>
+                        <td onclick="ppGlobals.currPrdId = '<{$v.id}>';">
+                            <a href="javascript:;" class="btn btn-dark" data-toggle="modal" data-target="#produce-products-edit">编辑</a>
+                        </td>
+                    </tr>
+                    <{/foreach}>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    let modelMap = {"ABC-1":{"白色":{"40":{"id":"7","batch_id":"1","quantity":"50","img":"http://static.ouj.com/shoes-game/9eff6c84617dd4add37dbe798f83f40c_size580x580_60318.jpg","model_name":"诶币瑟","gender":"2","style":"跑鞋"},"41":{"id":"5","batch_id":"1","quantity":"600","img":"http://static.ouj.com/shoes-game/9eff6c84617dd4add37dbe798f83f40c_size580x580_60318.jpg","model_name":"诶币瑟","gender":"2","style":"跑鞋"}},"绿色":{"39":{"id":"1","batch_id":"1","quantity":"100","img":"http://static.ouj.com/shoes-game/9eff6c84617dd4add37dbe798f83f40c_size580x580_60318.jpg","model_name":"诶币瑟","gender":"2","style":"跑鞋"}},"黄色":{"45":{"id":"2","batch_id":"1","quantity":"50","img":"http://static.ouj.com/shoes-game/9eff6c84617dd4add37dbe798f83f40c_size580x580_60318.jpg","model_name":"诶币瑟","gender":"2","style":"跑鞋"}}},"DEF-2":{"红色":{"42":{"id":"6","batch_id":"1","quantity":"500","img":"http://static.ouj.com/shoes-game/9eff6c84617dd4add37dbe798f83f40c_size580x580_60318.jpg","model_name":"地易富","gender":"0","style":"休闲"}},"蓝色":{"42":{"id":"3","batch_id":"1","quantity":"80","img":"http://static.ouj.com/shoes-game/9eff6c84617dd4add37dbe798f83f40c_size580x580_60318.jpg","model_name":"地易富","gender":"0","style":"休闲"}},"黑色":{"40":{"id":"4","batch_id":"1","quantity":"300","img":"http://static.ouj.com/shoes-game/9eff6c84617dd4add37dbe798f83f40c_size580x580_60318.jpg","model_name":"地易富","gender":"0","style":"休闲"}}}};
+    for (let modelNo of Object.keys(modelMap)) {//合并型号列
+        let mList = $(`td[rowspanSelector=${md5(modelNo)}]`);
+        if (mList.length > 1) {
+            mList[0].setAttribute('rowspan', mList.length);
+            for (let i in mList) if (i > 0) mList[i].outerHTML = '';
+        }
+        for (let color of Object.keys(modelMap[modelNo])) {//合并颜色列
+            let cList = $(`td[rowspanSelector=${md5(modelNo+color)}]`);
+            if (cList.length > 1) {
+                cList[0].setAttribute('rowspan', cList.length);
+                for (let i in cList) if (i > 0) cList[i].outerHTML = '';
+            }
+
+            for (let sizeZh of Object.keys(modelMap[modelNo][color])) {//合并码数列
+                let sList = $(`td[rowspanSelector=${md5(modelNo+color+sizeZh)}]`);
+                if (sList.length > 1) {
+                    sList[0].setAttribute('rowspan', sList.length);
+                    for (let i in sList) if (i > 0) sList[i].outerHTML = '';
+                }
+            }
+        }
+    }
+</script>
+
+
+
+<{include file='produce_products_edit.html'}>
