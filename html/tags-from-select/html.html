@@ -1,0 +1,26 @@
+<!-- 打标签的偷懒实现方法 -->
+
+<select class="supplier-acc-types-select">
+    <option value="">类型→</option>
+    <{foreach $sprt->catagories as $c}>
+        <option value="<{$c}>"><{$c}></option>
+    <{/foreach}>
+</select>
+<input type="text" class="supplier-acc-types">
+
+
+
+<script>
+$('body').on('change', '.supplier-acc-types-select', e => {//选择类型以快速填写
+    let v = $(e.target).val().replace(/\s/g, '');
+    if (v != '') {
+        let inputTypes = $(e.target).parent('.supplier-acc-line').children('.supplier-acc-types');
+        let raw = inputTypes.val().replace(/\s/g, '');
+        let list = raw == '' ? [] : raw.split(',');
+        if (list.indexOf(v) === -1) {
+            list.unshift(v);
+        }
+        inputTypes.val(list.join(','));
+    }
+});
+</script>
