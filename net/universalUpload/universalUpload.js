@@ -1,4 +1,4 @@
-window.Ltrelib = window.Ltrelib || {};//使用一个生僻的名称作为全局变量，以存储自定义的库，防止与其它变量冲突
+window.LtreLib = window.LtreLib || {};//使用一个生僻的名称作为全局变量，以存储自定义的库，防止与其它变量冲突
 
 /**
  * 支持多图、多类型上传，能够多样化处理上传结果
@@ -32,7 +32,7 @@ window.Ltrelib = window.Ltrelib || {};//使用一个生僻的名称作为全局�
  *          在原生AJAX上传模式下，仅支持json和text
  * 
  * 示例1 (标记过时, 不推荐)：
- *      let uu = new Ltrelib.universalUpload;
+ *      let uu = new LtreLib.universalUpload;
  *      uu.api = 'xxxxx';
  *      uu.fileInputName = 'yyyyy';
  *      ...
@@ -41,7 +41,7 @@ window.Ltrelib = window.Ltrelib || {};//使用一个生僻的名称作为全局�
  *      });
  * 
  * 示例2：
- *      let uu = new Ltrelib.universalUpload;
+ *      let uu = new LtreLib.universalUpload;
  *      uu.api = 'xxxxx';
  *      uu.fileInputName = 'yyyyy';
  *      //代替bindTrigger()
@@ -49,7 +49,7 @@ window.Ltrelib = window.Ltrelib || {};//使用一个生僻的名称作为全局�
  *      ...
  * 
  * 示例3:
- *      let uu = new Ltrelib.universalUpload;
+ *      let uu = new LtreLib.universalUpload;
  *      uu.setup({
  *          api: 'xxxx',
  *          fileInputName = 'yyyy',
@@ -58,7 +58,7 @@ window.Ltrelib = window.Ltrelib || {};//使用一个生僻的名称作为全局�
  *      });
  * 
  * 示例4:
- *      let uu = new Ltrelib.universalUpload({
+ *      let uu = new LtreLib.universalUpload({
  *          api: 'xxxx',
  *          fileInputName = 'yyyy',
  *          trigger: {domSelector:'#example', evtType:'click'},
@@ -67,7 +67,7 @@ window.Ltrelib = window.Ltrelib || {};//使用一个生僻的名称作为全局�
  *      
  * @param {Object} setupArgs 一次性配置所有参数（可选）
  */
-Ltrelib.universalUpload = function(setupArgs){
+LtreLib.universalUpload = function(setupArgs){
 
     var that = this;
     var raw = {};
