@@ -1,6 +1,11 @@
 将基于chromium等的web app作为分享接收者（web share target API）
 Receiving shared data with the Web Share Target API
 https://web.dev/web-share-target/
+https://web.dev/web-share/
+https://w3c.github.io/web-share/demos/share-files.html
+https://scrapbook-pwa.web.app/
+
+
 
 借助此，结合termux/PWA/file explorer关联起来，开发更强大的功能：
 例如 
