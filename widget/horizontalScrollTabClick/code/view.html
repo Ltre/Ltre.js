@@ -1,0 +1,136 @@
+<style>
+
+    /* 批次横条 BEGIN */
+    .batch-container{
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    .batch-list{
+        display: flex;
+        background-color: #f0f2f5;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        padding: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    .batch-tab{
+        display: flex;
+        font-size: 18px;
+        padding: 5px;
+        margin-right: 20px;
+        color: rgba(0, 0, 0, 0.65);
+        cursor: pointer;
+        border-radius: 5px;
+        align-items: center;
+    }
+    .batch-tab-select{ 
+        color: rgba(255, 255, 255, 0.99) !important;
+        background-color:rgba(2, 167, 240, 0.949019607843137);
+    }
+    .batch-move{
+        background-color: #f0f2f5;
+        font-size: 64px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .batch-move-left,.batch-move-right{
+        cursor:pointer;
+    }
+    /* 批次横条 END */
+    
+</style>
+
+
+<div class="batch-container row">
+    <div class="col-11 batch-list">
+        <{foreach $mList as $k=>$m}>
+            <div class="batch-tab <{if $k eq 15}>batch-tab-select<{/if}>"><{$m}>批次</div>
+        <{/foreach}>
+    </div>
+    <div class="batch-move col-1">
+        <i class="batch-move-left fa fa-caret-left" aria-hidden="true" data-arrow="left"></i>
+        <i class="batch-move-right fa fa-caret-right" aria-hidden="true" data-arrow="right"></i>
+    </div>
+</div>
+
+
+
+<script>
+    //批次横条 - 左右滚动批次
+    function scrollBatch(arrow, deltaLeft){
+        arrow = arrow || (arrow = 'right');
+
+        let elemBegin, elemEnd, visibleCount=0;//可见元素首位，可见元素末位，可见元素数
+        let contnrSt = getComputedStyle($('.batch-list')[0]);
+        let containerX = $('.batch-list').offset().left;//容器X轴偏移
+        let containerW = $('.batch-list').width() + +contnrSt.paddingLeft.replace(/[^\d]/g, '') + +contnrSt.paddingRight.replace(/[^\d]/g, '');
+        // let scrollX = $('.batch-list').scrollLeft();
+        let scrollX = 0;
+        for (let e of $('.batch-tab').toArray()) {
+            let st = getComputedStyle(e);
+            let x = $(e).offset().left - containerX;//相对容器的X轴偏移
+            let w = $(e).width() + +st.paddingLeft.replace(/[^\d]/g, '') + +st.paddingRight.replace(/[^\d]/g, '');
+            let overflowLeft = x < scrollX - w;
+            let overflowRight = x > containerW + scrollX;
+            let visible = ! overflowLeft && ! overflowRight;
+            if (! elemBegin && visible) elemBegin = e;
+            if (visible) {
+                elemEnd = e;
+                visibleCount ++;
+            }
+            console.log({e, containerW, containerX, scrollX, x, w, overflowLeft, overflowRight, visible});
+        }
+
+        //执行差异值滚动
+        let currLeft = $('.batch-list').scrollLeft();
+        deltaLeft = deltaLeft || $(elemEnd).offset().left - containerX;
+        LtreLib.timing({
+            a: 0,
+            z: 30,
+            delay: 8,
+            onTiming: function(opt){
+                let moveLeft = currLeft + (arrow=='right'?1:-1) * deltaLeft * (opt.i/opt.z);
+                $('.batch-list').scrollLeft(moveLeft);
+            }
+        });
+    }
+
+    //批次横条 - 监听左右滚动
+    $('.batch-move-left,.batch-move-right').click(function(){
+        scrollBatch($(this).data('arrow'));
+    });
+
+    //批次横条 - 选中
+    $('.batch-tab').click(function(){
+        let clz = 'batch-tab-select';
+        $(this).addClass(clz).siblings().removeClass(clz);
+
+        //处理点击两侧边缘不完整按钮时，稍微滚动，使被选中的按钮完整显示
+        let containerW = $('.batch-list').width();
+        let containerX = $('.batch-list').offset().left;
+        let $next = $(this).next();
+        if ($next.size()) {
+            let nextX = $next.offset().left - containerX;
+            if (nextX > containerW) {
+                scrollBatch('right', $next.width());
+            }
+        }
+        let $prev = $(this).prev();
+        if ($prev.size()) {
+            let prevX = $prev.offset().left - containerX;
+            if (prevX < 0) {
+                scrollBatch('left', $prev.width());
+            }
+        }
+        //@todo 其他业务...
+    });
+
+    //批次横条 - 凸显当前选中批次
+    scrollBatch('right', $('.batch-tab-select').offset().left - $('.batch-list').offset().left);
+
+</script>
+
+
