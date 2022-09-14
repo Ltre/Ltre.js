@@ -1,0 +1,135 @@
+
+/** 公共 BEGIN **/
+.common-line-space-10{
+    height:10px;
+}
+/** 公共 END **/
+
+
+
+
+.detail-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    white-space: nowrap;
+    border: 1px solid lightgray;
+    margin-left: 0;
+    margin-right: 0;
+    width: 50%;
+}
+.detail-tabs{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: center;
+    width: 16%;
+}
+.detail-tab{
+    font-size: 20px;
+    text-align: center;
+    line-height: 50px;
+    cursor:pointer;
+}
+.detail-tab-select{
+    background-color:#1890ff;
+    color:white;
+}
+.detail-right{
+    /* position:relative; */
+    width: 84%;
+    border-left: 1px solid lightgray;
+    overflow: auto;
+    /* height: 300px; */
+}
+.detail-right-header{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    border-bottom:1px solid lightgray;
+}
+.detail-right-header-title{
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 42px;
+}
+.detail-right-header-add{
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+    line-height: 30px;
+    border: 0;
+    background: rgba(24, 144, 255, 1);
+    padding: 3px;
+    border-radius: 8px;
+}
+.detail-right-header-add-trigger{
+}
+.detail-elem-list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow: auto;
+    padding: 10px;
+}
+.detail-elem{
+    position:relative;
+    height: 35px;
+    margin: auto 5px auto 0;
+    cursor: pointer;
+    background-color: aliceblue;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding:2px 10px 10px 2px;
+    border:2px dashed lightgray;
+}
+.detail-elem>span{
+}
+.detail-elem>input{
+    display:none;
+}
+.detail-elem>i{
+    position:absolute;
+    right: 0;
+    bottom:0;
+    width:11px;
+    height:13px;
+    color:lightgray;
+    z-index: 999;
+}
+.detail-elem-editing{
+    padding:0 !important;
+    background-color:cornsilk;
+}
+.detail-elem-editing>span{
+    display:none !important;
+}
+.detail-elem-editing>input{
+    display:inherit !important;
+    background-color: #ffffff00 !important;
+}
+#detail-tip{
+    /* position: absolute; */
+    /* bottom: 0; */
+    padding: 10px;
+}
+#detail-tip-succ{
+    color: green;
+    display: none;
+}
+#detail-tip-err{
+    color: red;
+    display: none;
+}
+#detail-tip-edit{
+    color: blue;
+    display: none;
+}
+#detail-tip-init{
+    color: chocolate;
+}

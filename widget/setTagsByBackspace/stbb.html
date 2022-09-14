@@ -1,0 +1,44 @@
+<link rel="stylesheet" href="stbb.css">
+
+<div class="detail-container">
+    <div class="detail-tabs">
+        <div data-purpose="compo" class="detail-tab detail-tab-select">电子元件</div>
+        <div data-purpose="part" class="detail-tab">鞋体部位</div>
+        <div data-purpose="acc" class="detail-tab">出厂配件</div>
+    </div>
+    <div class="detail-right">
+        <div class="detail-right-header">
+            <div class="detail-right-header-title">电子元件</div>
+            <button class="detail-right-header-add">
+                &nbsp;&nbsp;
+                <i class="fa fa-plus" aria-hidden="true"></i> 
+                <span class="detail-right-header-add-trigger">新增</span>
+                &nbsp;&nbsp;
+            </button>
+        </div>
+        <div class="detail-elem-list">
+            <div class="detail-elem detail-elem-tpl" style="display:none;">
+                <span>IMU芯片</span>
+                <input class="form-control form-control-sm" value="IMU芯片">
+                <i class="fa fa-edit" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div id="detail-tip">
+            <span id="detail-tip-succ">更新成功</span>
+            <span id="detail-tip-err">名称重复</span>
+            <span id="detail-tip-edit">
+                1、在编辑模式时，按下回车键，以保存数据；<br>
+                2、当清空标签文本并按下回车键，可删除标签；<br>
+                3、在空闲状态下，按下回车键，以新增标签
+            </span>
+            <span id="detail-tip-init">在空闲状态下，按下回车键，以新增标签</span>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    window.cataMap = {"compo":["fdsjifojio","\u4e1c\u5382","\u5171\u5b58\u6d3e\u5382","\u5206\u7ea2\u5382","\u52a8\u6001\u6e05\u96f6\u5382","\u53cd\u5bf9\u6b7b\u54e6\u964d\u4f4e\u54e6","\u5730\u78c1\u7528\u82af\u7247","\u5766\u514b\u5382","\u5c0f\u5e73\u5382","\u6089\u5c3c\u5976\u7238","\u6253\u6241\u5382","\u653e\u5927\u955c\u6b7b\u54e6\u5c31\u53d1io","\u65b0\u51a0\u906e\u7f9e\u5e03\u5382","\u70ed\u654f\u8717\u725b","\u738b\u5c40\u62cd\u6848","\u78c1\u5438\u5145\u7535\u5934","\u78c1\u94c1\u5382","\u7948\u7fe0\u5382","\u7f51\u5427\u5382","\u84dd\u7259\u5929\u7ebf","\u897f\u5382","\u8f93\u5165\u6cd5","\u94c1\u7247\u5382","\u9526\u8863\u536b\u5382"],"part":["fdsfds","\u4e94\u6bdb\u5382","\u5927\u5e95\u5382","\u6218\u72fc\u5382","\u798f\u5bff\u87ba\u6750\u6599","\u7c89\u86c6\u5382","\u9762\u6599\u5382","\u978b\u9762"],"acc":["fjsfio","\u5145\u7535\u7ebf","\u5305\u88c5\u76d2","\u5370\u5237\u5382","\u53cd\u7f8e\u5de5\u4f5c\u5382","\u653e\u6025\u54e6\u5c31","\u6c34\u519b\u5382","\u7231\u56fd\u53821","\u7684\u53d1\u6325\u53f8\u6cd5\u53ca","\u76d1\u72f1\u53d1\u5e16\u51cf\u5211\u5382","\u7ebf\u6750\u5382","\u8bf4\u660e\u4e66","\u8d74\u7f8e\u751f\u6d3b\u5382","\u9020\u7eb8\u5382","\u9a74\u5382"]};
+</script>
+
+<script type="text/javascript" src="stbb.js"></script>
