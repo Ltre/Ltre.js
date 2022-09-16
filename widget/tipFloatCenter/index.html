@@ -1,0 +1,61 @@
+
+
+<style>
+.tip{
+    position:absolute; 
+    z-index:999; 
+    font-size: 36px;
+    text-align: center;
+    font-weight: bold; 
+    display:none;
+}
+#tip-normal{
+    background-color: lemonchiffon;
+}
+#tip-succ{
+    background-color: #00800042;
+}
+#tip-err{
+    background-color: pink;
+}
+</style>
+
+<!-- 提示信息 -->
+<div id="tip-normal" class="tip">ERROR TIPS</div>
+<div id="tip-succ" class="tip">SUCC TIPS</div>
+<div id="tip-err" class="tip">ERROR TIPS</div>
+
+
+<script>
+function tip(msg, type/*, $otherElem*/, timeout){
+    $('.tip').hide();
+
+    msg || (msg = '');
+    type || (type = 'normal'); //normal, succ, err
+    //$otherElem || ($otherElem = null); //错误时，定位到错误位置，加红框显示
+    timeout || (timeout = 2000);
+
+    let map = {
+        normal: $('#tip-normal'),
+        succ: $('#tip-succ'),
+        err: $('#tip-err')
+    };
+    if (!~ Object.keys(map).indexOf(type)) {
+        return;
+    }
+
+    let tip = map[type];
+    let p = tip.parent();
+    p.css('position', 'relative');
+    let left = (p.width() - tip.width()) / 2;
+    let top = (p.height() - tip.height()) / 2;
+    tip.text(msg).css({left: left, top: top}).fadeIn();
+
+    //$otherElem && $otherElem.size() && $otherElem.css('border', '1px solid red').focus();
+    setTimeout(()=>{
+        tip.fadeOut();
+        p.css('position', '');
+        //$otherElem && $otherElem.size() && $otherElem.css('border', '');
+    }, timeout);
+}
+</script>
