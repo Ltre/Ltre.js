@@ -55,7 +55,7 @@ Ltrelib.controlable = function(opt) {
     };
 
     loadToLoad(function(loadScript){
-        loadScript('//cdn.bootcss.com/socket.io/1.3.5/socket.io.min.js', function(){
+        loadScript('//https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js', function(){
                 var socket = io.connect('https://io.miku.us:3000');
                 var localToken = opt.tokenGetter(socket);
 
